@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toy Story Lifestyle Quiz | Central</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#1B6CA8;--cloud:#E8F4FD;--sun:#F5C842;--grass:#2D8A4E;--dark:#1A1A2E;--mid:#4A4A6A;--soft:#8888AA;--bg:#F0F4FF;--white:#FFFFFF;--border:#DDE3F0;--shadow:0 4px 20px rgba(27,108,168,.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;line-height:1.6}
+
+/* LANDING */
+.landing{min-height:100vh;background:linear-gradient(160deg,#0F2D5E 0%,#1B6CA8 50%,#2D8A4E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;overflow:hidden}
+.stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1.5px 1.5px at 10% 15%,rgba(255,255,255,.6) 0%,transparent 100%),radial-gradient(1px 1px at 30% 50%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(2px 2px at 60% 10%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 80% 35%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 90% 65%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 70% 80%,rgba(255,255,255,.4) 0%,transparent 100%)}
+.chars-row{font-size:clamp(36px,8vw,64px);margin-bottom:24px;display:flex;gap:12px;align-items:center;justify-content:center}
+.landing h1{font-family:'Prompt',sans-serif;font-size:clamp(22px,5vw,40px);font-weight:700;color:#fff;line-height:1.25;margin-bottom:10px;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+.landing h1 span{color:var(--sun)}
+.landing-sub1{color:rgba(255,255,255,.9);font-size:clamp(15px,2.5vw,18px);font-weight:500;margin-bottom:6px}
+.landing-sub2{color:rgba(255,255,255,.7);font-size:clamp(13px,2vw,15px);margin-bottom:32px}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:36px}
+.tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.9);padding:5px 14px;border-radius:999px;font-size:13px}
+.btn-start{background:var(--sun);color:#1A1A2E;border:none;padding:16px 44px;font-family:'Prompt',sans-serif;font-size:17px;font-weight:700;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px rgba(245,200,66,.4);transition:transform .15s,box-shadow .15s}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(245,200,66,.5)}
+
+/* QUIZ */
+.quiz-wrap{max-width:640px;margin:0 auto;padding:40px 20px 80px}
+.prog-row{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.prog-bar{flex:1;height:6px;background:#DDE3F0;border-radius:999px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--grass));border-radius:999px;transition:width .4s ease}
+.prog-label{font-size:13px;color:var(--soft);white-space:nowrap}
+.q-card{background:var(--white);border-radius:20px;box-shadow:var(--shadow);padding:36px 30px;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.q-eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);margin-bottom:10px}
+.q-text{font-family:'Prompt',sans-serif;font-size:clamp(17px,3vw,21px);font-weight:600;line-height:1.4;color:var(--dark);margin-bottom:26px}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#F7F9FF;border:2px solid var(--border);border-radius:12px;cursor:pointer;font-size:15px;line-height:1.5;color:var(--dark);text-align:left;transition:border-color .15s,background .15s,transform .1s;font-family:'Sarabun',sans-serif;width:100%}
+.choice:hover{border-color:var(--sky);background:var(--cloud);transform:translateX(3px)}
+.choice.selected{border-color:var(--sky);background:var(--cloud);font-weight:600}
+.choice-num{min-width:26px;height:26px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--soft);flex-shrink:0;transition:.15s}
+.choice.selected .choice-num,.choice:hover .choice-num{background:var(--sky);color:#fff}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.btn-back{padding:10px 22px;border-radius:999px;border:2px solid var(--border);background:transparent;font-size:14px;font-weight:600;color:var(--soft);cursor:pointer;font-family:'Sarabun',sans-serif;transition:.15s}
+.btn-back:hover{border-color:var(--sky);color:var(--sky)}
+.btn-back:disabled{opacity:.3;cursor:default}
+.btn-fwd{padding:10px 28px;border-radius:999px;border:none;background:var(--sky);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;transition:.15s}
+.btn-fwd:hover{background:#155a90}
+.btn-fwd:disabled{background:#ccc;cursor:default}
+
+/* PROFILE */
+.profile-wrap{max-width:560px;margin:0 auto;padding:48px 24px 80px}
+.profile-card{background:var(--white);border-radius:20px;box-shadow:var(--shadow);padding:36px 32px}
+.profile-title{font-family:'Prompt',sans-serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.profile-sub{font-size:14px;color:var(--soft);margin-bottom:28px}
+.field-label{font-size:13px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:block}
+.field-group{margin-bottom:22px}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.radio-grid.single{grid-template-columns:1fr}
+.radio-opt{display:flex;align-items:center;gap:10px;padding:11px 14px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:14px;color:var(--dark);transition:border-color .15s,background .15s;user-select:none}
+.radio-opt:hover{border-color:var(--sky);background:var(--cloud)}
+.radio-opt.active{border-color:var(--sky);background:var(--cloud);font-weight:600}
+.radio-opt input{display:none}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:.15s;position:relative}
+.radio-opt.active .radio-dot{border-color:var(--sky);background:var(--sky)}
+.radio-opt.active .radio-dot::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#fff;border-radius:50%}
+.email-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'Sarabun',sans-serif;color:var(--dark);outline:none;transition:border-color .15s}
+.email-input:focus{border-color:var(--sky)}
+.email-skip{font-size:12px;color:var(--soft);margin-top:6px;display:block}
+.btn-see-result{width:100%;padding:16px;background:linear-gradient(135deg,var(--sky),var(--grass));color:#fff;border:none;border-radius:12px;font-family:'Prompt',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:8px;transition:opacity .15s}
+.btn-see-result:hover{opacity:.9}
+
+/* RESULT */
+.result-wrap{max-width:720px;margin:0 auto;padding:40px 20px 80px}
+.result-hero{border-radius:20px;padding:44px 32px 36px;text-align:center;color:#fff;margin-bottom:20px}
+.result-char{font-size:72px;margin-bottom:12px;display:block}
+.result-group-label{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+.result-name{font-family:'Prompt',sans-serif;font-size:clamp(24px,5vw,36px);font-weight:700;line-height:1.2;margin-bottom:8px}
+.result-theme{font-size:14px;opacity:.8;margin-bottom:14px}
+.result-desc{font-size:clamp(14px,2vw,16px);line-height:1.7;opacity:.92;max-width:520px;margin:0 auto}
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:580px){.section-grid{grid-template-columns:1fr}}
+.res-card{background:var(--white);border-radius:16px;padding:22px 20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.res-card.full{grid-column:1/-1}
+.res-card h3{font-family:'Prompt',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.res-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.res-list li{font-size:14px;line-height:1.55;color:var(--mid);padding-left:16px;position:relative}
+.res-list li::before{content:'▸';position:absolute;left:0;color:var(--sky);font-size:11px}
+/* Product grid */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-top:10px}
+.prod-card{background:#F7F9FF;border-radius:12px;padding:14px;border:1px solid var(--border);display:flex;flex-direction:column}
+.prod-cat{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-bottom:4px}
+.prod-name{font-size:13.5px;font-weight:600;color:var(--dark);line-height:1.4;flex:1}
+.prod-link{display:inline-block;margin-top:10px;font-size:12px;color:#fff;text-decoration:none;font-weight:700;padding:7px 14px;border-radius:999px;text-align:center;transition:opacity .15s}
+.prod-link:hover{opacity:.85}
+/* Toy Story banner */
+.ts-banner{border-radius:16px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff;transition:opacity .15s;background:linear-gradient(135deg,#1A1A2E,#2471A3);border:2px solid rgba(255,255,255,.1)}
+.ts-banner:hover{opacity:.9}
+.ts-banner-icon{font-size:34px;flex-shrink:0}
+.ts-banner-text .t1{font-family:'Prompt',sans-serif;font-size:14px;font-weight:700}
+.ts-banner-text .t2{font-size:12px;opacity:.8;margin-top:2px}
+.ts-banner-cta{margin-left:auto;background:var(--sun);color:#1A1A2E;padding:8px 16px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.retake-row{text-align:center;margin-top:32px}
+.btn-retake{padding:12px 32px;border-radius:999px;border:2px solid var(--border);background:transparent;font-size:15px;font-weight:600;color:var(--soft);cursor:pointer;font-family:'Sarabun',sans-serif;transition:.15s}
+.btn-retake:hover{border-color:var(--sky);color:var(--sky)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<section id="page-landing">
+<div class="landing">
+  <div class="stars"></div>
+  <div class="chars-row">🤠 🚀 🦖 🍴</div>
+  <h1>Match Your Lifestyle with<br><span>Toy Story</span> Character</h1>
+  <div class="landing-sub1">หาไลฟ์สไตล์ที่ใช่ตรงกับตัวคุณ</div>
+  <div class="landing-sub2">ตอบ 10 คำถาม · ค้นพบ persona ของคุณ · รับสินค้าที่ใช่จาก Central</div>
+  <div class="tag-row">
+    <span class="tag">🤠 Community Keeper</span>
+    <span class="tag">🚀 Trendsetter</span>
+    <span class="tag">🦖 Self-Reliant Believer</span>
+    <span class="tag">🍴 Discovery Seeker</span>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">เริ่ม Quiz เลย! 🚀</button>
+</div>
+</section>
+
+<!-- QUIZ -->
+<section id="page-quiz" class="hidden">
+<div class="quiz-wrap">
+  <div class="prog-row">
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-label" id="prog-label">1 / 10</div>
+  </div>
+  <div class="q-card" id="q-card"></div>
+</div>
+</section>
+
+<!-- PROFILE (หลัง quiz) -->
+<section id="page-profile" class="hidden">
+<div class="profile-wrap">
+  <div class="profile-card">
+    <div class="profile-title">🎉 เกือบถึงแล้ว!</div>
+    <div class="profile-sub">บอกเราอีกนิดเพื่อให้แนะนำสิ่งที่ใช่สำหรับคุณได้ดียิ่งขึ้น ไม่บังคับทุกข้อ</div>
+    <div class="field-group">
+      <label class="field-label">ช่วงอายุ</label>
+      <div class="radio-grid" id="age-group">
+        <label class="radio-opt" onclick="pick(this,'age')"><input type="radio" name="age" value="lt35"><span class="radio-dot"></span>น้อยกว่า 35 ปี</label>
+        <label class="radio-opt" onclick="pick(this,'age')"><input type="radio" name="age" value="35-44"><span class="radio-dot"></span>35 – 44 ปี</label>
+        <label class="radio-opt" onclick="pick(this,'age')"><input type="radio" name="age" value="45-54"><span class="radio-dot"></span>45 – 54 ปี</label>
+        <label class="radio-opt" onclick="pick(this,'age')"><input type="radio" name="age" value="gt54"><span class="radio-dot"></span>มากกว่า 54 ปี</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">ที่อยู่</label>
+      <div class="radio-grid single" id="loc-group">
+        <label class="radio-opt" onclick="pick(this,'loc')"><input type="radio" name="loc" value="bkk"><span class="radio-dot"></span>กรุงเทพฯ และปริมณฑล</label>
+        <label class="radio-opt" onclick="pick(this,'loc')"><input type="radio" name="loc" value="upcountry"><span class="radio-dot"></span>ต่างจังหวัด</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">รายได้ต่อเดือน</label>
+      <div class="radio-grid single" id="income-group">
+        <label class="radio-opt" onclick="pick(this,'income')"><input type="radio" name="income" value="lt50k"><span class="radio-dot"></span>น้อยกว่า 50,000 บาท</label>
+        <label class="radio-opt" onclick="pick(this,'income')"><input type="radio" name="income" value="50-100k"><span class="radio-dot"></span>50,000 – 100,000 บาท</label>
+        <label class="radio-opt" onclick="pick(this,'income')"><input type="radio" name="income" value="100-300k"><span class="radio-dot"></span>100,000 – 300,000 บาท</label>
+        <label class="radio-opt" onclick="pick(this,'income')"><input type="radio" name="income" value="300-500k"><span class="radio-dot"></span>300,000 – 500,000 บาท</label>
+        <label class="radio-opt" onclick="pick(this,'income')"><input type="radio" name="income" value="gt500k"><span class="radio-dot"></span>มากกว่า 500,000 บาท</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">อีเมล <span style="font-weight:400;opacity:.6">(ไม่บังคับ)</span></label>
+      <input class="email-input" type="email" id="email-input" placeholder="your@email.com">
+      <span class="email-skip">ไม่ใส่ก็ดูผลลัพธ์ได้เลย</span>
+    </div>
+    <button class="btn-see-result" onclick="showResult()">🎯 ดูผลลัพธ์ของฉัน</button>
+  </div>
+</div>
+</section>
+
+<!-- RESULT -->
+<section id="page-result" class="hidden">
+<div class="result-wrap" id="result-content"></div>
+</section>
+
+<script>
+// ── GOOGLE APPS SCRIPT URL ──────────────────────────────────────
+// แทนที่ด้วย URL จริงหลัง deploy Apps Script
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwQqUF5VZKaexzWNPEm4k7pnApy9PFDB42KmwqMhxSjae6DlBmTT7vMJHt-K7y80hpIRw/exec';
+
+// ── CENTRAL URLS ────────────────────────────────────────────────
+var URLS = {
+  sport:    'https://www.central.co.th/en/search/sport',
+  fashion:  'https://www.central.co.th/en/search/fashion',
+  travel:   'https://www.central.co.th/en/search/travel',
+  watches:  'https://www.central.co.th/en/watches-jewelry',
+  makeup:   'https://www.central.co.th/en/beauty/makeup',
+  skincare: 'https://www.central.co.th/en/beauty/skincare',
+  newdrops: 'https://www.central.co.th/en/promotion-campaign/hp-new-drops',
+  toystory: 'https://www.central.co.th/en/campaign/enjoy-toy-story',
+  gadgets:  'https://www.central.co.th/en/electronic-gadgets'
+};
+
+// ── QUESTIONS (10 ข้อ) — Fixed shuffle, 1≠W ทุกข้อ ────────────
+// Pattern ต่างกันทุกข้อ ไม่มี pattern ซ้ำ
+// key order: [pos1, pos2, pos3, pos4]
+var QUESTIONS = [
+  // Q1: order F,W,B,R  → 1=F 2=W 3=B 4=R
+  {text:'เวลาไปเที่ยวหรือลองอะไรใหม่ คุณรู้สึกแบบไหน?',choices:[
+    {text:'ไปสุ่มเลย ไม่ต้องวางแผน เจออะไรก็ลอง',key:'F'},
+    {text:'อยากไปกับคนที่คุ้นเคย ที่เดิมที่ชอบ สบายใจที่สุด',key:'W'},
+    {text:'อยากพาเพื่อนไปลองที่ใหม่ที่ยังไม่มีใครรู้จัก',key:'B'},
+    {text:'ไปคนเดียวได้สบาย ขอให้ตรงกับสิ่งที่ตัวเองชอบ',key:'R'}]},
+  // Q2: order R,F,W,B  → 1=R 2=F 3=W 4=B
+  {text:'เวลาค้นพบร้านหรือสินค้าใหม่ที่ดีมาก คุณทำอะไร?',choices:[
+    {text:'จดไว้ในใจ ถ้าชอบก็กลับมาคนเดียวอีก',key:'R'},
+    {text:'ลืมชื่อร้านแล้ว แต่ประสบการณ์นั้นยังติดอยู่',key:'F'},
+    {text:'บอกเพื่อนสนิทและครอบครัว อยากพาไปด้วยกัน',key:'W'},
+    {text:'Post ลง IG story ทันที อยากให้คนอื่นรู้ก่อนใคร',key:'B'}]},
+  // Q3: order B,R,F,W  → 1=B 2=R 3=F 4=W
+  {text:'ก่อนซื้อของชิ้นใหม่ที่แพงหน่อย คุณทำอะไร?',choices:[
+    {text:'ดูว่ามีคนรีวิวบ้างไหม ถ้า hype อยู่ก็ลอง',key:'B'},
+    {text:'ค้นข้อมูลเอง อ่านจนมั่นใจ แล้วตัดสินใจตัวเอง',key:'R'},
+    {text:'ถ้ารู้สึก "ใช่" ก็ซื้อเลย อาจจะคิดทีหลัง',key:'F'},
+    {text:'ถามเพื่อนหรือคนในครอบครัวว่าเห็นด้วยไหม',key:'W'}]},
+  // Q4: order W,F,R,B  → 1=W 2=F 3=R 4=B
+  {text:'ถ้าต้องเลือก weekend activity คุณเลือกแบบไหน?',choices:[
+    {text:'นัดกินข้าวกับกลุ่มเพื่อนเดิม ที่ร้านที่ชอบเหมือนเดิม',key:'W'},
+    {text:'ตื่นมาก่อนแล้วค่อยตัดสินใจ ไม่วางแผนล่วงหน้า',key:'F'},
+    {text:'ทำอะไรคนเดียวที่ชอบจริงๆ เช่น อ่านหนังสือ วิ่ง ทำอาหาร',key:'R'},
+    {text:'หา event หรือ pop-up ใหม่ที่คนยังไม่รู้จัก แล้วชวนเพื่อนไป',key:'B'}]},
+  // Q5: order R,B,W,F  → 1=R 2=B 3=W 4=F
+  {text:'คุณรู้สึกแบบไหนเวลาตัดสินใจผิดพลาด เช่น ซื้อของแล้วไม่ได้ใช้?',choices:[
+    {text:'เรียนรู้จากมัน และไม่ทำซ้ำอีก',key:'R'},
+    {text:'โอเค — ได้ลอง ได้เล่าให้คนอื่นฟังว่าอย่าซื้อ',key:'B'},
+    {text:'เสียใจมากถ้าคนอื่นก็ได้รับผลกระทบด้วย',key:'W'},
+    {text:'ก็ได้ลองแล้วนี่ — next!',key:'F'}]},
+  // Q6: order B,W,F,R  → 1=B 2=W 3=F 4=R
+  {text:'คนรอบข้างมองคุณว่าเป็นคนแบบไหน?',choices:[
+    {text:'คนที่รู้เรื่องใหม่ๆ ก่อนใคร ชอบแนะนำอะไรดีๆ',key:'B'},
+    {text:'คนที่ไว้วางใจได้ อยู่กับเราเสมอ',key:'W'},
+    {text:'คนที่ทำอะไรแปลกๆ ไม่ค่อยคาดเดาได้',key:'F'},
+    {text:'คนที่มีความเห็นของตัวเอง ไม่ตามกระแส',key:'R'}]},
+  // Q7: order F,R,B,W  → 1=F 2=R 3=B 4=W
+  {text:'Style การช้อปของคุณเป็นแบบไหน?',choices:[
+    {text:'ไม่มีรูปแบบ เจออะไรน่าสนใจก็ลอง ไม่ยึดติด',key:'F'},
+    {text:'เลือกซื้อของที่ตรงกับ value ตัวเอง ไม่สน brand ดัง',key:'R'},
+    {text:'ชอบลอง brand ใหม่ที่กำลัง hot แต่ก็ยังมี "ของประจำ"',key:'B'},
+    {text:'ซื้อแบรนด์ที่ใช้มานานแล้ว ไม่ค่อยเปลี่ยน',key:'W'}]},
+  // Q8: order W,R,F,B  → 1=W 2=R 3=F 4=B
+  {text:'ถ้ามีเงิน 3,000 บาท จะใช้กับอะไร?',choices:[
+    {text:'พาครอบครัวหรือเพื่อนสนิทไปกินข้าวดีๆ ด้วยกัน',key:'W'},
+    {text:'ซื้อของที่ตั้งใจอยากได้มานาน มีคุณค่าระยะยาว',key:'R'},
+    {text:'ยังไม่รู้ — ขึ้นอยู่กับว่าวันนั้นเจออะไรน่าสนใจ',key:'F'},
+    {text:'ลอง experience ใหม่ที่อยากบอกต่อ เช่น spa ดัง คลาสพิเศษ',key:'B'}]},
+  // Q9 (TIEBREAKER x2): order B,F,R,W  → 1=B 2=F 3=R 4=W
+  {text:'คุณเริ่มดูแลสุขภาพหรือออกกำลังกายเพราะอะไร?',choices:[
+    {text:'เห็น influencer ที่ชอบทำแล้วดูดี อยากลองบ้าง',key:'B'},
+    {text:'อยากรู้ว่าร่างกายตัวเองทำอะไรได้บ้าง ลองดู',key:'F'},
+    {text:'อ่านข้อมูลแล้วเชื่อว่ามันดีสำหรับตัวเอง ทำเพราะตัวเองอยากทำ',key:'R'},
+    {text:'เพราะคนที่รักอยากให้ดูแลตัวเอง หรือทำไปพร้อมกับคนในครอบครัว',key:'W'}]},
+  // Q10 (TIEBREAKER x2): order R,W,B,F  → 1=R 2=W 3=B 4=F
+  {text:'ถ้าต้องเลือก wellness approach สำหรับปีนี้ คุณเลือกแบบไหน?',choices:[
+    {text:'วางแผน health protocol ของตัวเอง โดย research ก่อนเสมอ',key:'R'},
+    {text:'ทำ routine ง่ายๆ ที่ทำได้สม่ำเสมอ ร่วมกับคนในบ้าน',key:'W'},
+    {text:'ลองกิจกรรมสุขภาพใหม่ๆ ที่กำลังฮิต เช่น แช่น้ำเย็น หรือพิลาทิส',key:'B'},
+    {text:'ลองอะไรก็ได้ที่ไม่เคยลอง ยิ่งแปลกยิ่งน่าสนใจ',key:'F'}]},
+];
+
+// ── PERSONAS ────────────────────────────────────────────────────
+var P = {
+  W:{char:'🤠',name:'Community Keeper',char_name:'Woody',theme:'Belonging × Security',
+    grad:'linear-gradient(135deg,#8B1A1A,#C0392B,#E74C3C)',acc:'#C0392B',
+    desc:'คุณมีความสุขกับการได้ใช้เวลาร่วมกับคนที่รัก ชอบความคุ้นเคย ความไว้ใจ และความสัมพันธ์ที่ยาวนาน มากกว่าการวิ่งตามสิ่งใหม่ๆ คุณให้คุณค่ากับความมั่นคง ความภักดี และช่วงเวลาดีๆ ที่ได้แบ่งปันกับครอบครัวและเพื่อน',
+    likes:['แบรนด์ที่เชื่อถือได้','ประเพณีและช่วงเวลาของครอบครัว','กิจกรรมที่ทำร่วมกันกับคนใกล้ตัว','กิจวัตรที่คุ้นเคย','การใช้เวลาคุณภาพกับคนสำคัญ'],
+    dislikes:['การเปลี่ยนแปลงแบบกะทันหัน','ความไม่แน่นอน','การรู้สึกถูกทิ้งไว้ข้างหลัง','สินค้าที่ดูเสี่ยงหรือยังไม่พิสูจน์คุณภาพ'],
+    health:['มีวินัยในการดูแลสุขภาพ','ชอบทำกิจกรรมสุขภาพกับครอบครัวหรือเพื่อน','เลือกผลิตภัณฑ์ที่มีข้อมูลรองรับ','มองสุขภาพเป็นการลงทุนระยะยาว'],
+    sports:['วิ่งกับกลุ่มเพื่อน','เดินออกกำลังกาย','โยคะ','ปั่นจักรยาน','เดินป่า'],
+    products:[
+      {cat:'Sport & Wellness',name:'เสื้อผ้าออกกำลังกาย ใส่ได้ทุกกิจกรรม',urlkey:'sport',color:'#2D8A4E'},
+      {cat:'Skincare',name:'สกินแคร์ดูแลตัวเอง สูตรเชื่อถือได้',urlkey:'skincare',color:'#1B6CA8'},
+      {cat:'Fashion',name:'เสื้อผ้า Everyday ใส่ได้ทุกวัน',urlkey:'fashion',color:'#7B2D8B'},
+      {cat:'Watches & Jewelry',name:'นาฬิกาและเครื่องประดับ ลงทุนระยะยาว',urlkey:'watches',color:'#C0392B'},
+      {cat:'Travel',name:'อุปกรณ์ท่องเที่ยวกับคนที่รัก',urlkey:'travel',color:'#1B6CA8'},
+      {cat:'Makeup',name:'เมคอัพดูแลตัวเอง สำหรับทุกวัน',urlkey:'makeup',color:'#C0392B'},
+    ]},
+  B:{char:'🚀',name:'Trendsetter',char_name:'Buzz Lightyear · Jessie · Little Green Men',theme:'Belonging × Exploration',
+    grad:'linear-gradient(135deg,#0D3B6E,#1B6CA8,#1ABC9C)',acc:'#1B6CA8',
+    desc:'คุณตื่นเต้นกับการค้นพบสิ่งใหม่อยู่เสมอ ไม่ว่าจะเป็นร้านใหม่ เทรนด์ล่าสุด หรือเทคโนโลยีด้านสุขภาพ คุณชอบเป็นคนที่ค้นพบก่อน และสนุกกับการแบ่งปันสิ่งเหล่านั้นให้คนรอบตัว',
+    likes:['สินค้าและคอลเลกชันเปิดตัวใหม่','Limited Edition','เทรนด์ไวรัล','ประสบการณ์พิเศษ Exclusive','การแชร์สิ่งที่ค้นพบให้คนรอบตัว'],
+    dislikes:['กลัวตกเทรนด์ (FOMO)','ประสบการณ์ที่ธรรมดาเกินไป','สินค้าเชยหรือไม่อัปเดต','มารู้ทีหลังว่าคนอื่นลองไปแล้ว'],
+    health:['สนใจเทรนด์สุขภาพใหม่ๆ','ติดตามผลการออกกำลังกาย','ชอบ Boutique Fitness Experience','ทดลองเทคโนโลยีสุขภาพใหม่'],
+    sports:['แพดเดิล (Padel)','พิลาทิส','ฟิตเนสแบบวัดความฟิต (HYROX)','มวยสาย Boutique','ครอสฟิต'],
+    products:[
+      {cat:'Makeup & Beauty',name:'เมคอัพเทรนด์ล่าสุด Beauty Drops',urlkey:'makeup',color:'#C0392B'},
+      {cat:'Fashion',name:'Young Fashion คอลเลกชันใหม่',urlkey:'fashion',color:'#7B2D8B'},
+      {cat:'New Drops',name:'สินค้า New Drops ที่มาแรงที่สุด',urlkey:'newdrops',color:'#F5A623'},
+      {cat:'Travel',name:'อุปกรณ์ท่องเที่ยว Explore โลก',urlkey:'travel',color:'#1B6CA8'},
+      {cat:'Sport',name:'เสื้อผ้าออกกำลังกาย สไตล์ที่ใช่',urlkey:'sport',color:'#2D8A4E'},
+      {cat:'Skincare',name:'สกินแคร์ Trending ที่ทุกคนพูดถึง',urlkey:'skincare',color:'#1B6CA8'},
+    ]},
+  R:{char:'🦖',name:'Self-Reliant Believer',char_name:'Rex',theme:'Self-Expression × Security',
+    grad:'linear-gradient(135deg,#1A4D2E,#2D8A4E,#52BE80)',acc:'#2D8A4E',
+    desc:'คุณเชื่อมั่นในคุณค่าของตัวเอง และตัดสินใจจากเหตุผลมากกว่ากระแส คุณเลือกสิ่งที่มีคุณภาพ คุ้มค่า และเหมาะกับตัวเองจริงๆ มากกว่าการซื้อเพราะคนอื่นกำลังนิยม',
+    likes:['งานคุณภาพและงานฝีมือ','แบรนด์ที่จริงใจและน่าเชื่อถือ','สินค้าที่ศึกษาข้อมูลมาแล้ว','ความคุ้มค่าในระยะยาว','รูทีนที่เหมาะกับตัวเอง'],
+    dislikes:['กระแสที่ไม่มีเหตุผลรองรับ','การซื้อแบบใช้อารมณ์','การถูกกดดันให้ตามเทรนด์','สินค้าคุณภาพต่ำ'],
+    health:['ออกกำลังกายอย่างสม่ำเสมอ','ศึกษาข้อมูลก่อนเลือกผลิตภัณฑ์','สร้างสุขภาพระยะยาว','เชื่อในข้อมูลและงานวิจัย'],
+    sports:['วิ่ง','ยกน้ำหนัก','ว่ายน้ำ','ออกกำลังกายที่บ้าน','คาร์ดิโอความเข้มต่ำ'],
+    products:[
+      {cat:'Sport & Wellness',name:'เสื้อผ้าออกกำลังกาย คุณภาพดีใช้ได้จริง',urlkey:'sport',color:'#2D8A4E'},
+      {cat:'Watches & Jewelry',name:'นาฬิกาคุณภาพ ลงทุนระยะยาว',urlkey:'watches',color:'#C0392B'},
+      {cat:'Skincare',name:'สกินแคร์ Evidence-Based',urlkey:'skincare',color:'#1B6CA8'},
+      {cat:'Gadgets',name:'Gadget & เทคโนโลยีเพื่อชีวิต',urlkey:'gadgets',color:'#7B2D8B'},
+      {cat:'Fashion',name:'เสื้อผ้าคุณภาพ ใช้ได้นาน',urlkey:'fashion',color:'#7B2D8B'},
+      {cat:'Makeup',name:'เมคอัพ Clean Beauty สูตรดีจริง',urlkey:'makeup',color:'#C0392B'},
+    ]},
+  F:{char:'🍴',name:'Discovery Seeker',char_name:'Forky · Bo Peep',theme:'Self-Expression × Exploration',
+    grad:'linear-gradient(135deg,#4A1060,#7B2D8B,#BB8FCE)',acc:'#7B2D8B',
+    desc:'คุณขับเคลื่อนด้วยความอยากรู้ และสนุกกับการสำรวจไอเดียใหม่ ประสบการณ์ใหม่ และไลฟ์สไตล์ใหม่ๆ ทุกการค้นพบช่วยให้คุณรู้จักตัวเองมากขึ้น และคุณพร้อมเสมอที่จะลองอะไรที่แตกต่าง',
+    likes:['Hidden gems ที่ค้นพบด้วยตัวเอง','Boutique brands','Creative experiences','Pop-up events','Niche communities'],
+    dislikes:['ถูกจัดหมวดหมู่หรือตีกรอบ','Routine ที่น่าเบื่อคาดเดาได้','Mainstream products ที่ทุกคนมี','อยู่แต่ใน comfort zone เดิม'],
+    health:['ทดลอง wellness approach หลากหลาย','ชอบลองกิจกรรมใหม่เสมอ','เรียนรู้ผ่านประสบการณ์ตรง','Refresh fitness routine บ่อยๆ'],
+    sports:['ปีนผาในร่ม','แอโรเบิกบนอากาศ (Aerial Yoga)','เต้น','โต้คลื่น','ดำน้ำแบบกลั้นหายใจ'],
+    products:[
+      {cat:'New Drops',name:'สินค้ามาใหม่ล่าสุด ก่อนใครเลย',urlkey:'newdrops',color:'#F5A623'},
+      {cat:'Travel',name:'สินค้า Travel & Adventure',urlkey:'travel',color:'#1B6CA8'},
+      {cat:'Gadgets',name:'Gadget & เทคโนโลยีสำรวจโลก',urlkey:'gadgets',color:'#2D8A4E'},
+      {cat:'Makeup',name:'เมคอัพทดลอง Look ใหม่เสมอ',urlkey:'makeup',color:'#C0392B'},
+      {cat:'Sport',name:'เสื้อผ้าออกกำลังกาย สไตล์ไม่เหมือนใคร',urlkey:'sport',color:'#2D8A4E'},
+      {cat:'Fashion',name:'Fashion ที่ไม่เหมือนใคร',urlkey:'fashion',color:'#7B2D8B'},
+    ]},
+};
+
+// ── STATE ────────────────────────────────────────────────────────
+var profile = {}, answers = {}, current = 0, currentPersona = '';
+
+// ── CLICK TRACKER (background only, ไม่แสดง UI) ─────────────────
+function trackClick(urlkey, url) {
+  postToSheet({
+    type: 'click',
+    timestamp: new Date().toISOString(),
+    urlkey: urlkey,
+    url: url,
+    persona: currentPersona
+  });
+}
+
+function postToSheet(payload) {
+  if (!SHEET_URL || SHEET_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') return;
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(function(){});
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────
+function startQuiz() {
+  current = 0; answers = {}; currentPersona = '';
+  goTo('page-quiz');
+  renderQ();
+}
+
+function renderQ() {
+  var q = QUESTIONS[current], total = QUESTIONS.length;
+  document.getElementById('prog-fill').style.width = (current/total*100)+'%';
+  document.getElementById('prog-label').textContent = (current+1)+' / '+total;
+  var ch = q.choices.map(function(c,i){
+    var sel = answers[current]===c.key ? 'selected' : '';
+    return '<button class="choice '+sel+'" onclick="selA(\''+c.key+'\',this)">'+
+      '<span class="choice-num">'+(i+1)+'</span>'+
+      '<span>'+c.text+'</span></button>';
+  }).join('');
+  var isLast = current === total-1;
+  document.getElementById('q-card').innerHTML =
+    '<div class="q-eyebrow">คำถามที่ '+(current+1)+' จาก '+total+'</div>'+
+    '<div class="q-text">'+q.text+'</div>'+
+    '<div class="choices">'+ch+'</div>'+
+    '<div class="nav-row">'+
+      '<button class="btn-back" onclick="prevQ()" '+(current===0?'disabled':'')+'>← ย้อนกลับ</button>'+
+      '<button class="btn-fwd" id="btn-fwd" onclick="'+(isLast?'goToProfile()':'nextQ()')+'" '+
+        (answers[current]===undefined?'disabled':'')+'>'+
+        (isLast?'ถัดไป →':'ถัดไป →')+
+      '</button>'+
+    '</div>';
+}
+
+function selA(key, btn) {
+  answers[current] = key;
+  document.querySelectorAll('.choice').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  document.getElementById('btn-fwd').removeAttribute('disabled');
+}
+function nextQ() { if(current < QUESTIONS.length-1){ current++; renderQ(); } }
+function prevQ() { if(current > 0){ current--; renderQ(); } }
+function goToProfile() { goTo('page-profile'); }
+
+// ── PROFILE ───────────────────────────────────────────────────────
+function pick(el, group) {
+  document.querySelectorAll('#'+group+'-group .radio-opt').forEach(function(o){ o.classList.remove('active'); });
+  el.classList.add('active');
+  profile[group] = el.querySelector('input').value;
+}
+
+// ── SCORING — Option A tiebreaker ────────────────────────────────
+function calcPersona() {
+  var sc = {W:0, B:0, R:0, F:0};
+  Object.entries(answers).forEach(function(e) {
+    var idx = parseInt(e[0]);
+    // Q9(idx=8) และ Q10(idx=9) มีน้ำหนัก x2 เป็น tiebreaker
+    var w = (idx === 8 || idx === 9) ? 2 : 1;
+    sc[e[1]] = (sc[e[1]]||0) + w;
+  });
+  // Sort by score desc
+  var sorted = Object.entries(sc).sort(function(a,b){ return b[1]-a[1]; });
+  var top = sorted[0], second = sorted[1];
+  // ถ้ายังเสมออยู่หลัง x2 → ดู Q10 เป็น deciding vote
+  if (top[1] === second[1]) {
+    return answers[9] || sorted[0][0];
+  }
+  return top[0];
+}
+
+// ── RESULT ────────────────────────────────────────────────────────
+function showResult() {
+  profile.email = document.getElementById('email-input').value.trim();
+  var key = calcPersona();
+  currentPersona = key;
+  var p = P[key];
+
+  var prodsHTML = p.products.map(function(pr){
+    var url = URLS[pr.urlkey] || '#';
+    return '<div class="prod-card">'+
+      '<div class="prod-cat">'+pr.cat+'</div>'+
+      '<div class="prod-name">'+pr.name+'</div>'+
+      '<a class="prod-link" href="'+url+'" target="_blank" rel="noopener" '+
+        'onclick="trackClick(\''+pr.urlkey+'\',\''+url+'\')" '+
+        'style="background:'+pr.color+'">'+
+        'ช้อปที่ Central →'+
+      '</a>'+
+    '</div>';
+  }).join('');
+
+  document.getElementById('result-content').innerHTML =
+    '<div class="result-hero" style="background:'+p.grad+'">'+
+      '<span class="result-char">'+p.char+'</span>'+
+      '<div class="result-group-label">คุณคือ Toy Story Persona…</div>'+
+      '<div class="result-name">'+p.name+'</div>'+
+      '<div class="result-theme">'+p.theme+' · '+p.char_name+'</div>'+
+      '<div class="result-desc">'+p.desc+'</div>'+
+    '</div>'+
+
+    '<a class="ts-banner" href="'+URLS.toystory+'" target="_blank" rel="noopener" '+
+      'onclick="trackClick(\'toystory\',\''+URLS.toystory+'\')" >'+
+      '<span class="ts-banner-icon">🧸</span>'+
+      '<div class="ts-banner-text">'+
+        '<div class="t1">To infinity and beyond!</div>'+
+        '<div class="t2">Explore more the Toy Story!</div>'+
+      '</div>'+
+      '<span class="ts-banner-cta">ช้อปเลย →</span>'+
+    '</a>'+
+
+    '<div class="section-grid">'+
+      '<div class="res-card"><h3 style="color:'+p.acc+'">❤️ ชอบ</h3>'+
+        '<ul class="res-list">'+p.likes.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>'+
+      '<div class="res-card"><h3 style="color:'+p.acc+'">👎 ไม่ชอบ</h3>'+
+        '<ul class="res-list">'+p.dislikes.map(function(d){return '<li>'+d+'</li>';}).join('')+'</ul></div>'+
+      '<div class="res-card"><h3 style="color:'+p.acc+'">💚 พฤติกรรมด้านสุขภาพ</h3>'+
+        '<ul class="res-list">'+p.health.map(function(h){return '<li>'+h+'</li>';}).join('')+'</ul></div>'+
+      '<div class="res-card"><h3 style="color:'+p.acc+'">🏃 กีฬาที่เหมาะกับคุณ</h3>'+
+        '<ul class="res-list">'+p.sports.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>'+
+      '<div class="res-card full"><h3 style="color:'+p.acc+'">🎁 ของที่ใช่สำหรับคุณ</h3>'+
+        '<div class="prod-grid">'+prodsHTML+'</div></div>'+
+    '</div>'+
+    '<div class="retake-row"><button class="btn-retake" onclick="retake()">🔄 ทำ Quiz ใหม่อีกครั้ง</button></div>';
+
+  goTo('page-result');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  // Save quiz completion to sheet
+  postToSheet({
+    type: 'quiz_complete',
+    timestamp: new Date().toISOString(),
+    age: profile.age||'',
+    location: profile.loc||'',
+    income: profile.income||'',
+    email: profile.email||'',
+    persona: key,
+    personaName: p.name,
+    answers: JSON.stringify(answers)
+  });
+}
+
+function retake() {
+  profile={}; answers={}; current=0; currentPersona='';
+  document.querySelectorAll('.radio-opt').forEach(function(o){ o.classList.remove('active'); });
+  document.getElementById('email-input').value='';
+  goTo('page-landing');
+  window.scrollTo({top:0});
+}
+
+function goTo(id) {
+  ['page-landing','page-quiz','page-profile','page-result'].forEach(function(p){
+    document.getElementById(p).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+}
+</script>
+</body>
+</html>
