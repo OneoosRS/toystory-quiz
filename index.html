@@ -115,7 +115,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--dark);min
   <div class="chars-row">🤠 🚀 🦖 🍴</div>
   <h1>Match Your Lifestyle with<br><span>Toy Story</span> Character</h1>
   <div class="landing-sub1">หาไลฟ์สไตล์ที่ใช่ตรงกับตัวคุณ</div>
-  <div class="landing-sub2">ตอบ 10 คำถาม · ค้นพบ persona ของคุณ · รับสินค้าที่ใช่จาก Central</div>
+  <div class="landing-sub2">ตอบ 10 คำถาม · ค้นพบ persona ของคุณ</div>
   <div class="tag-row">
     <span class="tag">🤠 Community Keeper</span>
     <span class="tag">🚀 Trendsetter</span>
@@ -143,6 +143,15 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--dark);min
   <div class="profile-card">
     <div class="profile-title">🎉 เกือบถึงแล้ว!</div>
     <div class="profile-sub">บอกเราอีกนิดเพื่อให้แนะนำสิ่งที่ใช่สำหรับคุณได้ดียิ่งขึ้น ไม่บังคับทุกข้อ</div>
+    <div class="field-group">
+      <label class="field-label">เพศ</label>
+      <div class="radio-grid" id="gender-group">
+        <label class="radio-opt" onclick="pick(this,'gender')"><input type="radio" name="gender" value="female"><span class="radio-dot"></span>หญิง</label>
+        <label class="radio-opt" onclick="pick(this,'gender')"><input type="radio" name="gender" value="male"><span class="radio-dot"></span>ชาย</label>
+        <label class="radio-opt" onclick="pick(this,'gender')"><input type="radio" name="gender" value="lgbtq"><span class="radio-dot"></span>LGBTQ+</label>
+        <label class="radio-opt" onclick="pick(this,'gender')"><input type="radio" name="gender" value="none"><span class="radio-dot"></span>ไม่ระบุ</label>
+      </div>
+    </div>
     <div class="field-group">
       <label class="field-label">ช่วงอายุ</label>
       <div class="radio-grid" id="age-group">
@@ -484,6 +493,7 @@ function showResult() {
     type: 'quiz_complete',
     timestamp: new Date().toISOString(),
     age: profile.age||'',
+    gender: profile.gender||'',
     location: profile.loc||'',
     income: profile.income||'',
     email: profile.email||'',
